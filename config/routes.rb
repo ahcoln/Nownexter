@@ -1,4 +1,8 @@
 Nownexter::Application.routes.draw do
+  get "visitors/index"
+  resources :visitors
+  # match '/', to: 'visitors#index'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

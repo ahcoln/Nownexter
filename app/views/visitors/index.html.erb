@@ -1,0 +1,9 @@
+<script>
+	$(document).ready(function() {
+		$(window).load(initiate_geolocation);
+	});
+</script>
+<% provide(:title, 'Index') %>
+<div id="ip">Client ip is <%= @client_ip %></div>
+<div id="lat"></div>
+<div id="lon"></div>

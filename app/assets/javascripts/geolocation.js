@@ -1,15 +1,27 @@
-//= require yqlgeo.js
-
 function initiate_geolocation() {  
+	//adding code to start the progressbar
+	alert("progressbar start");
+
     if (navigator.geolocation)  
     {  
-		//adding code to start the progressbar
-		alert("progressbar start");
         navigator.geolocation.getCurrentPosition(handle_geolocation_query, handle_errors, {enableHighAccuracy:true});  
     }  
     else  
     {  
-        yqlgeo.get('visitor', normalize_yql_response);  
+		if(google.loader.ClientLocation)
+		{
+			visitor_lat = google.loader.ClientLocation.latitude;
+			visitor_lon = google.loader.ClientLocation.longitude;
+			visitor_city = google.loader.ClientLocation.address.city;
+			visitor_region = google.loader.ClientLocation.address.region;
+			visitor_country = google.loader.ClientLocation.address.country;
+			visitor_countrycode = google.loader.ClientLocation.address.country_code;
+			document.getElementById('googlelocation').innerHTML = '<p>Lat/Lon (google): ' + visitor_lat + ' / ' + visitor_lon + '</p><p>Location: ' + visitor_city + ', ' + visitor_region + ', ' + visitor_country + ' (' + visitor_countrycode + ')</p>';
+		}
+		else
+		{
+			document.getElementById('googlelocation').innerHTML = '<p>Your browser does not support geolocation!</p>';
+		}		
     }  
 }  
 
@@ -29,31 +41,6 @@ function handle_errors(error){
         break;  
     }  
 }  
-
-function normalize_yql_response(response){  
-    if (response.error)  
-    {  
-        var error = { code : 0 };  
-        handle_errors(error);  
-        return;  
-    }  
-
-    var position = {  
-        coords :  
-        {  
-            latitude: response.place.centroid.latitude,  
-            longitude: response.place.centroid.longitude  
-        },  
-        address :  
-        {  
-            city: response.place.locality2.content,  
-            region: response.place.admin1.content,  
-            country: response.place.country.content  
-        }  
-    };  
-
-    handle_geolocation_query(position);  
-}   
 
 function handle_geolocation_query(position){  
 	jQuery("#lat").html(position.coords.latitude);
